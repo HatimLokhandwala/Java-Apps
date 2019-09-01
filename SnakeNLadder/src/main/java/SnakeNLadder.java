@@ -26,6 +26,12 @@ public class SnakeNLadder {
 			index++;
 		}
 		Game game = new Game(playerList);
-		game.playGame();
+		try {
+			game.playGame();
+			game.printLeaderBoard();
+		} catch(Exception ex) {
+			System.out.println("Error in playing game " + ex.getMessage());
+		}
+
 	}
 }

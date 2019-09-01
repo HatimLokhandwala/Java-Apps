@@ -12,7 +12,7 @@ public class Slot {
 
 	Slot(int index) {
 		this.index = index;
-		this.playerList = new ArrayList<Player>();
+		this.playerList = new ArrayList<>();
 	}
 
 	public int getIndex() {

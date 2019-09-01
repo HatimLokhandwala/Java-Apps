@@ -1,13 +1,24 @@
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
  * Created by hatim.lokhandwala on 15/08/19.
  */
+
+class Dice {
+	static int getNextMove(){
+		return 2;
+	}
+}
+
 public class Game {
 	private List<Player> playerList;
+	private HashSet<Player> leaderBoard; //used to maintain the order of the players completing game
 	private Board board;
 
-	void addPieces() {
+	private void addPieces() {
 		board.addPiece(2, 20);
 		board.addPiece(88, 100);
 		board.addPiece(49, 61);
@@ -17,16 +28,43 @@ public class Game {
 	}
 
 	Game(List<Player> playerList) {
+		if(playerList == null || playerList.size() == 0) {
+			throw new IllegalArgumentException("No players in the game");
+		}
 		this.playerList = playerList;
 		board = new Board(100);
 		addPieces();
+		leaderBoard = new LinkedHashSet<>();
 	}
 
 	void playGame() throws Exception {
-		if(playerList == null || playerList.size() == 0) {
-			throw new Exception("No players in the game");
+		int current = 0;
+		while(leaderBoard.size() != playerList.size()) {
+			Player currentPlayer = playerList.get(current);
+			if(!leaderBoard.contains(currentPlayer)) {
+				System.out.println("turn of player " + currentPlayer);
+				//roll dice
+				int nextMove = Dice.getNextMove();
+				int destPos = board.getDestinationPos(currentPlayer.getCurrentPosition() + nextMove);
+				board.removePlayer(currentPlayer.getCurrentPosition(), currentPlayer);
+				board.addPlayer(destPos, currentPlayer);
+				currentPlayer.setCurrentPosition(destPos);
+				//check if the player has reached the end pos in the board
+				if(board.isWinningPosition(destPos)) {
+					System.out.println("Player " + currentPlayer + " has reached the destination position");
+					leaderBoard.add(currentPlayer);
+				}
+			}
+			current = (current + 1) % playerList.size();
 		}
+		System.out.println("Game completed");
+	}
 
+	void printLeaderBoard() {
+		int count = 1;
+		for (Player p : leaderBoard) {
+			System.out.println("Position: " + count++ + " Name: " + p);
+		}
 	}
 
 	void addPlayer(Player p) {
@@ -38,14 +76,6 @@ public class Game {
 			throw new Exception("Invalid index");
 		}
 		return board.getPlayers(index);
-	}
-
-//	getSlotOfAPlayer() {
-//
-//	}
-
-	List<Player> getWinners(){
-		return null;
 	}
 
 }

@@ -12,7 +12,7 @@ public abstract class BasePiece implements  Piece {
 		this.end = end;
 	}
 
-	public int getDestationIndex() {
+	public int getDestinationIndex() {
 		return end;
 	}
 
