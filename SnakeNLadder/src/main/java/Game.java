@@ -1,15 +1,17 @@
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by hatim.lokhandwala on 15/08/19.
  */
 
 class Dice {
+	private static Random random;
+	private static final int UPPER_BOUND = 6;
+	static {
+		random = new Random();
+	}
 	static int getNextMove(){
-		return 2;
+		return random.nextInt(UPPER_BOUND) + 1;
 	}
 }
 
